@@ -1,16 +1,12 @@
-var wildcard = document.querySelectorAll('*');
-for (var i = 0; i < wildcard.length; i++) {
-    wildcard[i].addEventListener('selectstart', function (e) {
-        e.preventDefault();
-    })
-}
-var body = document.querySelector('body');
-var dot1 = document.querySelector('.dot1');
-var dot2 = document.querySelector('.dot2');
-var dot3 = document.querySelector('.dot3');
-var dot4 = document.querySelector('.dot4');
-var dot5 = document.querySelector('.dot5');
-var dot6 = document.querySelector('.dot6');
+var tool = new Tool(document, window);
+tool.textProhibition();
+var body = getDQS('body');
+var dot1 = getDQS('.dot1');
+var dot2 = getDQS('.dot2');
+var dot3 = getDQS('.dot3');
+var dot4 = getDQS('.dot4');
+var dot5 = getDQS('.dot5');
+var dot6 = getDQS('.dot6');
 var children = new Array();
 children[0] = dot2;
 children[1] = dot3;
