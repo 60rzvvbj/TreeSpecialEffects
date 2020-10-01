@@ -11,12 +11,12 @@ var children = new Array();
 children[0] = dot2;
 children[1] = dot3;
 children[2] = dot4;
-children[3] = dot5;
-children[4] = dot6;
+// children[3] = dot5;
+// children[4] = dot6;
 var nowNode;
 var constLen = 200;
 var childLen = 150;
-var bfb = 0.9;
+var bfb = 0.8;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#aaa';
 var lineColor = lineUpColor;
@@ -29,6 +29,28 @@ dot1.style.left = getIntRandom(0, 1600) + 'px';
 dot1.style.top = getIntRandom(0, 700) + 'px';
 dot1.x = dot1.offsetLeft;
 dot1.y = dot1.offsetTop;
+dot5.style.left = getIntRandom(0, 1600) + 'px';
+dot5.style.top = getIntRandom(0, 700) + 'px';
+dot5.x = dot5.offsetLeft;
+dot5.y = dot5.offsetTop;
+dot6.style.left = getIntRandom(0, 1600) + 'px';
+dot6.style.top = getIntRandom(0, 700) + 'px';
+dot6.x = dot6.offsetLeft;
+dot6.y = dot6.offsetTop;
+dot5.addEventListener('mousedown', function (e) {
+    mx = e.clientX;
+    my = e.clientY;
+    nowNode = this;
+    nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+    document.addEventListener('mousemove', move2);
+})
+dot6.addEventListener('mousedown', function (e) {
+    mx = e.clientX;
+    my = e.clientY;
+    nowNode = this;
+    nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+    document.addEventListener('mousemove', move2);
+})
 for (var i = 0; i < children.length; i++) {
     children[i].x = children[i].offsetLeft;
     children[i].y = children[i].offsetTop;
@@ -235,10 +257,20 @@ function runConstraint(node1, node2, type, len) {
 for (var i = 0; i < children.length; i++) {
     addConstraint(dot1, children[i], 1, constLen);
     addSetLine(children[i], dot1);
+    addConstraint(dot5, children[i], 2, childLen);
+    addConstraint(dot6, children[i], 2, childLen);
     for (var j = i + 1; j < children.length; j++) {
         addConstraint(children[i], children[j], 2, childLen);
     }
 }
+
+addConstraint(dot4, dot5, 1, constLen);
+addConstraint(dot4, dot6, 1, constLen);
+addConstraint(dot5, dot6, 2, childLen);
+addSetLine(dot5, dot4);
+addSetLine(dot6, dot4);
+addConstraint(dot5, dot1, 2, childLen);
+addConstraint(dot6, dot1, 2, childLen);
 setInterval(function () {
     for (var i = 0; i < constraintArr.length; i++) {
         var node1 = constraintArr[i][0];
