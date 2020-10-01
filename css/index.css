@@ -1,0 +1,105 @@
+body {
+    margin: 0px;
+    background-color: #000;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.dot1 {
+    position: absolute;
+    z-index: 20;
+    top: 500px;
+    left: 500px;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    font-size: 20px;
+    line-height: 80px;
+    text-align: center;
+    color: #fff;
+    background-color: skyblue;
+    cursor: pointer;
+    /* color: rgb(255, 252, 166); */
+}
+
+.dot2 {
+    position: absolute;
+    z-index: 20;
+    top: 12px;
+    left: 712px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: pink;
+    cursor: pointer;
+}
+
+.dot3 {
+    position: absolute;
+    z-index: 20;
+    top: 12px;
+    left: 712px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(255, 134, 118);
+    cursor: pointer;
+}
+
+.dot4 {
+    position: absolute;
+    z-index: 20;
+    top: 12px;
+    left: 712px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(193, 111, 255);
+    cursor: pointer;
+}
+
+.dot5 {
+    position: absolute;
+    z-index: 20;
+    top: 12px;
+    left: 712px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(255, 114, 166);
+    cursor: pointer;
+}
+
+.dot6 {
+    position: absolute;
+    z-index: 20;
+    top: 12px;
+    left: 712px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(144, 255, 107);
+    cursor: pointer;
+}
