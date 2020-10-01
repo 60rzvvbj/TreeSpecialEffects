@@ -13,7 +13,7 @@ children[1] = dot3;
 children[2] = dot4;
 children[3] = dot5;
 children[4] = dot6;
-var nowChild;
+var nowNode;
 var constLen = 200;
 var childLen = 150;
 var bfb = 0.9;
@@ -22,10 +22,11 @@ var lineUpColor = '#aaa';
 var lineColor = lineUpColor;
 for (var i = 0; i < children.length; i++) {
     children[i].line = document.createElement('div');
+    children[i].style.left = getIntRandom(0, 1600) + 'px';
+    children[i].style.top = getIntRandom(0, 700) + 'px';
 }
-var x1, y1;
-x1 = dot1.offsetLeft;
-y1 = dot1.offsetTop;
+dot1.style.left = getIntRandom(0, 1600) + 'px';
+dot1.style.top = getIntRandom(0, 700) + 'px';
 dot1.x = dot1.offsetLeft;
 dot1.y = dot1.offsetTop;
 for (var i = 0; i < children.length; i++) {
@@ -33,32 +34,13 @@ for (var i = 0; i < children.length; i++) {
     children[i].y = children[i].offsetTop;
 }
 
-// function linkRoot(node) {
-//     if (node != nowChild) {
-//         var slen = Math.sqrt((node.x - x1) * (node.x - x1) + (node.y - y1) * (node.y - y1));
-//         var tlen = constLen + (slen - constLen) * bfb;
-//         var bl = tlen / slen;
-//         node.x = x1 + (node.x - x1) * bl;
-//         node.y = y1 + (node.y - y1) * bl;
-//         node.style.left = node.x + 'px';
-//         node.style.top = node.y + 'px';
-//         setline(node, dot1);
-//     } else {
-//         node.style.left = node.x + 'px';
-//         node.style.top = node.y + 'px';
-//         setline(node, dot1);
-//     }
-// }
-
 function move1(e) {
     var cx = e.clientX;
     var cy = e.clientY;
-    x1 = x1 + cx - mx;
-    y1 = y1 + cy - my;
-    dot1.x = x1;
-    dot1.y = y1;
-    dot1.style.left = x1 + 'px';
-    dot1.style.top = y1 + 'px';
+    dot1.x = dot1.x + cx - mx;
+    dot1.y = dot1.y + cy - my;
+    dot1.style.left = dot1.x + 'px';
+    dot1.style.top = dot1.y + 'px';
     mx = cx;
     my = cy;
 }
@@ -66,20 +48,19 @@ function move1(e) {
 function move2(e) {
     var cx = e.clientX;
     var cy = e.clientY;
-    nowChild.x = nowChild.x + cx - mx;
-    nowChild.y = nowChild.y + cy - my;
-    // linkRoot(nowChild);
-    mx = nowChild.x;
-    my = nowChild.y;
+    nowNode.x = nowNode.x + cx - mx;
+    nowNode.y = nowNode.y + cy - my;
+    mx = nowNode.x;
+    my = nowNode.y;
 }
 dot1.addEventListener('mousedown', function (e) {
-    nowChild = this;
+    nowNode = this;
     mx = e.clientX;
     my = e.clientY;
-    x1 = dot1.offsetLeft;
-    y1 = dot1.offsetTop;
+    dot1.x = dot1.offsetLeft;
+    dot1.y = dot1.offsetTop;
     lineColor = lineDownColor;
-    dot1.style.boxShadow = '0px 0px 20px ' + lineDownColor;
+    dot1.style.boxShadow = '0px 0px 30px ' + lineDownColor;
     for (var i = 0; i < children.length; i++) {
         children[i].line.style.backgroundColor = lineDownColor;
     }
@@ -92,10 +73,10 @@ document.addEventListener('mouseup', function () {
         children[i].line.style.backgroundColor = lineUpColor;
     }
     dot1.style.boxShadow = 'none';
-    if (nowChild) {
-        nowChild.style.boxShadow = 'none';
+    if (nowNode) {
+        nowNode.style.boxShadow = 'none';
     }
-    nowChild = null;
+    nowNode = null;
     document.removeEventListener('mousemove', move1);
     document.removeEventListener('mousemove', move2);
 })
@@ -104,8 +85,8 @@ for (var i = 0; i < children.length; i++) {
     children[i].addEventListener('mousedown', function (e) {
         mx = e.clientX;
         my = e.clientY;
-        nowChild = this;
-        nowChild.style.boxShadow = '0px 0px 20px ' + lineDownColor;
+        nowNode = this;
+        nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
         document.addEventListener('mousemove', move2);
     })
 }
@@ -130,68 +111,14 @@ function setline(node1, node2) {
     node1.line.style.left = xz - lineLen / 2 + 'px';
     node1.line.style.top = yz - 1 + 'px';
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
-    node1.line.style.backgroundColor = lineColor;
+    if (node1 == nowNode) {
+        node1.line.style.backgroundColor = lineDownColor;
+    } else {
+        node1.line.style.backgroundColor = lineColor;
+    }
     body.appendChild(node1.line);
 }
 
-// function separateChild(ch1, ch2) {
-//     if (ch1 == nowChild || ch2 == nowChild) {
-//         if (ch2 == nowChild) {
-//             var t = ch2;
-//             ch2 = ch1;
-//             ch1 = t;
-//         }
-//         if (ch1.x == ch2.x && ch1.y == ch2.y) {
-//             ch1.x += 0.00001;
-//             ch1.y += 0.00001;
-//         }
-//         var x2 = ch1.x;
-//         var x3 = ch2.x;
-//         var y2 = ch1.y;
-//         var y3 = ch2.y;
-//         var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-//         if (cslen < childLen) {
-//             var tlen = childLen - (childLen - cslen) * bfb;
-//             var cbl = tlen / cslen;
-//             ch2.x = ch1.x + (ch2.x - ch1.x) * cbl;
-//             ch2.y = ch1.y + (ch2.y - ch1.y) * cbl;
-//             linkRoot(ch1);
-//             linkRoot(ch2);
-//         }
-//     } else {
-//         if (ch1.x == ch2.x && ch1.y == ch2.y) {
-//             ch1.x += 0.00001;
-//             ch1.y += 0.00001;
-//         }
-//         var x2 = ch1.x;
-//         var x3 = ch2.x;
-//         var y2 = ch1.y;
-//         var y3 = ch2.y;
-//         var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-//         if (cslen < childLen) {
-//             var tlen = childLen - (childLen - cslen) * bfb;
-//             var cbl = tlen / cslen;
-//             var zx = (x2 + x3) / 2;
-//             var zy = (y2 + y3) / 2;
-//             ch2.x = zx - (zx - x3) * cbl;
-//             ch1.x = zx - (zx - x2) * cbl;
-//             ch2.y = zy - (zy - y3) * cbl;
-//             ch1.y = zy - (zy - y2) * cbl;
-//             linkRoot(ch1);
-//             linkRoot(ch2);
-//         }
-//     }
-// }
-// setInterval(function () {
-//     for (var i = 0; i < children.length; i++) {
-//         for (var j = i + 1; j < children.length; j++) {
-//             separateChild(children[i], children[j]);
-//         }
-//     }
-//     for (var i = 0; i < children.length; i++) {
-//         linkRoot(children[i]);
-//     }
-// }, 5);
 function setPosition(node) {
     node.style.left = node.x + 'px';
     node.style.top = node.y + 'px';
@@ -209,8 +136,8 @@ function addConstraint(node1, node2, type, len) {
 
 function runConstraint(node1, node2, type, len) {
     if (type == 1) { //定长约束
-        if (node1 == nowChild || node2 == nowChild) {
-            if (node2 == nowChild) {
+        if (node1 == nowNode || node2 == nowNode) {
+            if (node2 == nowNode) {
                 var t = node2;
                 node2 = node1;
                 node1 = t;
@@ -256,8 +183,8 @@ function runConstraint(node1, node2, type, len) {
             }
         }
     } else if (type == 2) { //最小长度约束
-        if (node1 == nowChild || node2 == nowChild) {
-            if (node2 == nowChild) {
+        if (node1 == nowNode || node2 == nowNode) {
+            if (node2 == nowNode) {
                 var t = node2;
                 node2 = node1;
                 node1 = t;
@@ -306,13 +233,11 @@ function runConstraint(node1, node2, type, len) {
 }
 
 for (var i = 0; i < children.length; i++) {
+    addConstraint(dot1, children[i], 1, constLen);
+    addSetLine(children[i], dot1);
     for (var j = i + 1; j < children.length; j++) {
         addConstraint(children[i], children[j], 2, childLen);
     }
-}
-for (var i = 0; i < children.length; i++) {
-    addConstraint(dot1, children[i], 1, constLen);
-    addSetLine(children[i], dot1);
 }
 setInterval(function () {
     for (var i = 0; i < constraintArr.length; i++) {
@@ -322,6 +247,8 @@ setInterval(function () {
         var len = constraintArr[i][3];
         runConstraint(node1, node2, type, len);
     }
+}, 5);
+setInterval(function () {
     for (var i = 0; i < setLineArr.length; i++) {
         var node1 = setLineArr[i][0];
         var node2 = setLineArr[i][1];
