@@ -16,7 +16,7 @@ children[4] = dot6;
 var nowChild;
 var constLen = 200;
 var childLen = 150;
-var bfb = 0.95;
+var bfb = 0.9;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#aaa';
 var lineColor = lineUpColor;
@@ -26,38 +26,39 @@ for (var i = 0; i < children.length; i++) {
 var x1, y1;
 x1 = dot1.offsetLeft;
 y1 = dot1.offsetTop;
+dot1.x = dot1.offsetLeft;
+dot1.y = dot1.offsetTop;
 for (var i = 0; i < children.length; i++) {
     children[i].x = children[i].offsetLeft;
     children[i].y = children[i].offsetTop;
 }
 
-function linkRoot(node) {
-    if (node != nowChild) {
-        var slen = Math.sqrt((node.x - x1) * (node.x - x1) + (node.y - y1) * (node.y - y1));
-        var tlen = constLen + (slen - constLen) * bfb;
-        var bl = tlen / slen;
-        node.x = x1 + (node.x - x1) * bl;
-        node.y = y1 + (node.y - y1) * bl;
-        node.style.left = node.x + 'px';
-        node.style.top = node.y + 'px';
-        setline(node, dot1);
-    } else {
-        node.style.left = node.x + 'px';
-        node.style.top = node.y + 'px';
-        setline(node, dot1);
-    }
-}
+// function linkRoot(node) {
+//     if (node != nowChild) {
+//         var slen = Math.sqrt((node.x - x1) * (node.x - x1) + (node.y - y1) * (node.y - y1));
+//         var tlen = constLen + (slen - constLen) * bfb;
+//         var bl = tlen / slen;
+//         node.x = x1 + (node.x - x1) * bl;
+//         node.y = y1 + (node.y - y1) * bl;
+//         node.style.left = node.x + 'px';
+//         node.style.top = node.y + 'px';
+//         setline(node, dot1);
+//     } else {
+//         node.style.left = node.x + 'px';
+//         node.style.top = node.y + 'px';
+//         setline(node, dot1);
+//     }
+// }
 
 function move1(e) {
     var cx = e.clientX;
     var cy = e.clientY;
     x1 = x1 + cx - mx;
     y1 = y1 + cy - my;
+    dot1.x = x1;
+    dot1.y = y1;
     dot1.style.left = x1 + 'px';
     dot1.style.top = y1 + 'px';
-    for (var i = 0; i < children.length; i++) {
-        linkRoot(children[i]);
-    }
     mx = cx;
     my = cy;
 }
@@ -67,11 +68,12 @@ function move2(e) {
     var cy = e.clientY;
     nowChild.x = nowChild.x + cx - mx;
     nowChild.y = nowChild.y + cy - my;
-    linkRoot(nowChild);
+    // linkRoot(nowChild);
     mx = nowChild.x;
     my = nowChild.y;
 }
 dot1.addEventListener('mousedown', function (e) {
+    nowChild = this;
     mx = e.clientX;
     my = e.clientY;
     x1 = dot1.offsetLeft;
@@ -93,8 +95,8 @@ document.addEventListener('mouseup', function () {
     if (nowChild) {
         nowChild.style.boxShadow = 'none';
     }
-    document.removeEventListener('mousemove', move1);
     nowChild = null;
+    document.removeEventListener('mousemove', move1);
     document.removeEventListener('mousemove', move2);
 })
 
@@ -132,61 +134,197 @@ function setline(node1, node2) {
     body.appendChild(node1.line);
 }
 
-function separateChild(ch1, ch2) {
-    if (ch1 == nowChild || ch2 == nowChild) {
-        if (ch2 == nowChild) {
-            var t = ch2;
-            ch2 = ch1;
-            ch1 = t;
+// function separateChild(ch1, ch2) {
+//     if (ch1 == nowChild || ch2 == nowChild) {
+//         if (ch2 == nowChild) {
+//             var t = ch2;
+//             ch2 = ch1;
+//             ch1 = t;
+//         }
+//         if (ch1.x == ch2.x && ch1.y == ch2.y) {
+//             ch1.x += 0.00001;
+//             ch1.y += 0.00001;
+//         }
+//         var x2 = ch1.x;
+//         var x3 = ch2.x;
+//         var y2 = ch1.y;
+//         var y3 = ch2.y;
+//         var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+//         if (cslen < childLen) {
+//             var tlen = childLen - (childLen - cslen) * bfb;
+//             var cbl = tlen / cslen;
+//             ch2.x = ch1.x + (ch2.x - ch1.x) * cbl;
+//             ch2.y = ch1.y + (ch2.y - ch1.y) * cbl;
+//             linkRoot(ch1);
+//             linkRoot(ch2);
+//         }
+//     } else {
+//         if (ch1.x == ch2.x && ch1.y == ch2.y) {
+//             ch1.x += 0.00001;
+//             ch1.y += 0.00001;
+//         }
+//         var x2 = ch1.x;
+//         var x3 = ch2.x;
+//         var y2 = ch1.y;
+//         var y3 = ch2.y;
+//         var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+//         if (cslen < childLen) {
+//             var tlen = childLen - (childLen - cslen) * bfb;
+//             var cbl = tlen / cslen;
+//             var zx = (x2 + x3) / 2;
+//             var zy = (y2 + y3) / 2;
+//             ch2.x = zx - (zx - x3) * cbl;
+//             ch1.x = zx - (zx - x2) * cbl;
+//             ch2.y = zy - (zy - y3) * cbl;
+//             ch1.y = zy - (zy - y2) * cbl;
+//             linkRoot(ch1);
+//             linkRoot(ch2);
+//         }
+//     }
+// }
+// setInterval(function () {
+//     for (var i = 0; i < children.length; i++) {
+//         for (var j = i + 1; j < children.length; j++) {
+//             separateChild(children[i], children[j]);
+//         }
+//     }
+//     for (var i = 0; i < children.length; i++) {
+//         linkRoot(children[i]);
+//     }
+// }, 5);
+function setPosition(node) {
+    node.style.left = node.x + 'px';
+    node.style.top = node.y + 'px';
+}
+var constraintArr = new Array();
+var setLineArr = new Array();
+
+function addSetLine(node1, node2) {
+    setLineArr.push([node1, node2]);
+}
+
+function addConstraint(node1, node2, type, len) {
+    constraintArr.push([node1, node2, type, len]);
+}
+
+function runConstraint(node1, node2, type, len) {
+    if (type == 1) { //定长约束
+        if (node1 == nowChild || node2 == nowChild) {
+            if (node2 == nowChild) {
+                var t = node2;
+                node2 = node1;
+                node1 = t;
+            }
+            if (node1.x == node2.x && node1.y == node2.y) {
+                node1.x += 0.00001;
+                node1.y += 0.00001;
+            }
+            var x2 = node1.x;
+            var x3 = node2.x;
+            var y2 = node1.y;
+            var y3 = node2.y;
+            var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+            if (cslen != len) {
+                var tlen = len - (len - cslen) * bfb;
+                var cbl = tlen / cslen;
+                node2.x = node1.x + (node2.x - node1.x) * cbl;
+                node2.y = node1.y + (node2.y - node1.y) * cbl;
+                setPosition(node1);
+                setPosition(node2);
+            }
+        } else {
+            if (node1.x == node2.x && node1.y == node2.y) {
+                node1.x += 0.00001;
+                node1.y += 0.00001;
+            }
+            var x2 = node1.x;
+            var x3 = node2.x;
+            var y2 = node1.y;
+            var y3 = node2.y;
+            var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+            if (cslen != len) {
+                var tlen = len - (len - cslen) * bfb;
+                var cbl = tlen / cslen;
+                var zx = (x2 + x3) / 2;
+                var zy = (y2 + y3) / 2;
+                node2.x = zx - (zx - x3) * cbl;
+                node1.x = zx - (zx - x2) * cbl;
+                node2.y = zy - (zy - y3) * cbl;
+                node1.y = zy - (zy - y2) * cbl;
+                setPosition(node1);
+                setPosition(node2);
+            }
         }
-        if (ch1.x == ch2.x && ch1.y == ch2.y) {
-            ch1.x += 0.00001;
-            ch1.y += 0.00001;
-        }
-        var x2 = ch1.x;
-        var x3 = ch2.x;
-        var y2 = ch1.y;
-        var y3 = ch2.y;
-        var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-        if (cslen < childLen) {
-            var tlen = childLen - (childLen - cslen) * bfb;
-            var cbl = tlen / cslen;
-            ch2.x = ch1.x + (ch2.x - ch1.x) * cbl;
-            ch2.y = ch1.y + (ch2.y - ch1.y) * cbl;
-            linkRoot(ch1);
-            linkRoot(ch2);
-        }
-    } else {
-        if (ch1.x == ch2.x && ch1.y == ch2.y) {
-            ch1.x += 0.00001;
-            ch1.y += 0.00001;
-        }
-        var x2 = ch1.x;
-        var x3 = ch2.x;
-        var y2 = ch1.y;
-        var y3 = ch2.y;
-        var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-        if (cslen < childLen) {
-            var tlen = childLen - (childLen - cslen) * bfb;
-            var cbl = tlen / cslen;
-            var zx = (x2 + x3) / 2;
-            var zy = (y2 + y3) / 2;
-            ch2.x = zx - (zx - x3) * cbl;
-            ch1.x = zx - (zx - x2) * cbl;
-            ch2.y = zy - (zy - y3) * cbl;
-            ch1.y = zy - (zy - y2) * cbl;
-            linkRoot(ch1);
-            linkRoot(ch2);
+    } else if (type == 2) { //最小长度约束
+        if (node1 == nowChild || node2 == nowChild) {
+            if (node2 == nowChild) {
+                var t = node2;
+                node2 = node1;
+                node1 = t;
+            }
+            if (node1.x == node2.x && node1.y == node2.y) {
+                node1.x += 0.00001;
+                node1.y += 0.00001;
+            }
+            var x2 = node1.x;
+            var x3 = node2.x;
+            var y2 = node1.y;
+            var y3 = node2.y;
+            var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+            if (cslen < len) {
+                var tlen = len - (len - cslen) * bfb;
+                var cbl = tlen / cslen;
+                node2.x = node1.x + (node2.x - node1.x) * cbl;
+                node2.y = node1.y + (node2.y - node1.y) * cbl;
+                setPosition(node1);
+                setPosition(node2);
+            }
+        } else {
+            if (node1.x == node2.x && node1.y == node2.y) {
+                node1.x += 0.00001;
+                node1.y += 0.00001;
+            }
+            var x2 = node1.x;
+            var x3 = node2.x;
+            var y2 = node1.y;
+            var y3 = node2.y;
+            var cslen = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+            if (cslen < len) {
+                var tlen = len - (len - cslen) * bfb;
+                var cbl = tlen / cslen;
+                var zx = (x2 + x3) / 2;
+                var zy = (y2 + y3) / 2;
+                node2.x = zx - (zx - x3) * cbl;
+                node1.x = zx - (zx - x2) * cbl;
+                node2.y = zy - (zy - y3) * cbl;
+                node1.y = zy - (zy - y2) * cbl;
+                setPosition(node1);
+                setPosition(node2);
+            }
         }
     }
 }
-setInterval(function () {
-    for (var i = 0; i < children.length; i++) {
-        for (var j = i + 1; j < children.length; j++) {
-            separateChild(children[i], children[j]);
-        }
+
+for (var i = 0; i < children.length; i++) {
+    for (var j = i + 1; j < children.length; j++) {
+        addConstraint(children[i], children[j], 2, childLen);
     }
-    for (var i = 0; i < children.length; i++) {
-        linkRoot(children[i]);
+}
+for (var i = 0; i < children.length; i++) {
+    addConstraint(dot1, children[i], 1, constLen);
+    addSetLine(children[i], dot1);
+}
+setInterval(function () {
+    for (var i = 0; i < constraintArr.length; i++) {
+        var node1 = constraintArr[i][0];
+        var node2 = constraintArr[i][1];
+        var type = constraintArr[i][2];
+        var len = constraintArr[i][3];
+        runConstraint(node1, node2, type, len);
+    }
+    for (var i = 0; i < setLineArr.length; i++) {
+        var node1 = setLineArr[i][0];
+        var node2 = setLineArr[i][1];
+        setline(node1, node2);
     }
 }, 5);
