@@ -91,3 +91,45 @@ body::-webkit-scrollbar {
     background-color: rgb(144, 255, 107);
     cursor: pointer;
 }
+
+.dot7 {
+    position: absolute;
+    z-index: 20;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(146, 255, 220);
+    cursor: pointer;
+}
+
+.dot8 {
+    position: absolute;
+    z-index: 20;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(224, 68, 159);
+    cursor: pointer;
+}
+
+.dot9 {
+    position: absolute;
+    z-index: 20;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(79, 181, 245);
+    cursor: pointer;
+}

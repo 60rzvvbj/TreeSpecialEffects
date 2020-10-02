@@ -7,56 +7,25 @@ var dot3 = getDQS('.dot3');
 var dot4 = getDQS('.dot4');
 var dot5 = getDQS('.dot5');
 var dot6 = getDQS('.dot6');
+var dot7 = getDQS('.dot7');
+var dot8 = getDQS('.dot8');
+var dot9 = getDQS('.dot9');
 dot1.childArr = [dot2, dot3, dot4];
-dot4.childArr = [dot5, dot6];
-// var children = new Array();
-// children[0] = dot2;
-// children[1] = dot3;
-// children[2] = dot4;
-// children[3] = dot5;
-// children[4] = dot6;
+dot2.childArr = [dot5];
+dot4.childArr = [dot6, dot7];
+dot6.childArr = [dot8, dot9];
 var nowNode;
-var constLen = 200;
-var childLen = 150;
+var constLen = 120;
+var childLen = 100;
 var bfb = 0.9;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#aaa';
 var lineColor = lineUpColor;
-// for (var i = 0; i < children.length; i++) {
-//     children[i].line = document.createElement('div');
-//     children[i].style.left = getIntRandom(0, 1600) + 'px';
-//     children[i].style.top = getIntRandom(0, 700) + 'px';
-// }
-// dot1.style.left = getIntRandom(0, 1600) + 'px';
-// dot1.style.top = getIntRandom(0, 700) + 'px';
-// dot1.x = dot1.offsetLeft;
-// dot1.y = dot1.offsetTop;
-// dot5.style.left = getIntRandom(0, 1600) + 'px';
-// dot5.style.top = getIntRandom(0, 700) + 'px';
-// dot5.x = dot5.offsetLeft;
-// dot5.y = dot5.offsetTop;
-// dot6.style.left = getIntRandom(0, 1600) + 'px';
-// dot6.style.top = getIntRandom(0, 700) + 'px';
-// dot6.x = dot6.offsetLeft;
-// dot6.y = dot6.offsetTop;
+var constraintArr = new Array();
+var setLineArr = new Array();
+var mx, my;
 
-// for (var i = 0; i < children.length; i++) {
-//     children[i].x = children[i].offsetLeft;
-//     children[i].y = children[i].offsetTop;
-// }
-
-function move1(e) {
-    var cx = e.clientX;
-    var cy = e.clientY;
-    dot1.x = dot1.x + cx - mx;
-    dot1.y = dot1.y + cy - my;
-    dot1.style.left = dot1.x + 'px';
-    dot1.style.top = dot1.y + 'px';
-    mx = cx;
-    my = cy;
-}
-
-function move2(e) {
+function move(e) {
     var cx = e.clientX;
     var cy = e.clientY;
     nowNode.x = nowNode.x + cx - mx;
@@ -64,33 +33,6 @@ function move2(e) {
     mx = nowNode.x;
     my = nowNode.y;
 }
-// dot1.addEventListener('mousedown', function (e) {
-//     mx = e.clientX;
-//     my = e.clientY;
-//     nowNode = this;
-//     // dot1.x = dot1.offsetLeft;
-//     // dot1.y = dot1.offsetTop;
-//     // lineColor = lineDownColor;
-//     dot1.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-//     // for (var i = 0; i < children.length; i++) {
-//     //     children[i].line.style.backgroundColor = lineDownColor;
-//     // }
-//     document.addEventListener('mousemove', move1);
-// })
-// dot5.addEventListener('mousedown', function (e) {
-//     mx = e.clientX;
-//     my = e.clientY;
-//     nowNode = this;
-//     nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-//     document.addEventListener('mousemove', move2);
-// })
-// dot6.addEventListener('mousedown', function (e) {
-//     mx = e.clientX;
-//     my = e.clientY;
-//     nowNode = this;
-//     nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-//     document.addEventListener('mousemove', move2);
-// })
 
 function setline(node1, node2) {
     try {
@@ -114,18 +56,25 @@ function setline(node1, node2) {
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
     if (node1 == nowNode) {
         node1.line.style.backgroundColor = lineDownColor;
+        body.appendChild(node1.line);
+        var t = nowNode;
+        while (t.father) {
+            if (t.father.line) {
+                t.father.line.style.backgroundColor = lineDownColor;
+                body.appendChild(t.line);
+            }
+            t = t.father;
+        }
     } else {
         node1.line.style.backgroundColor = lineColor;
+        body.appendChild(node1.line);
     }
-    body.appendChild(node1.line);
 }
 
 function setPosition(node) {
-    node.style.left = node.x + 'px';
-    node.style.top = node.y + 'px';
+    node.style.left = node.x - node.offsetWidth / 2 + 'px';
+    node.style.top = node.y - node.offsetHeight / 2 + 'px';
 }
-var constraintArr = new Array();
-var setLineArr = new Array();
 
 function addSetLine(node1, node2) {
     setLineArr.push([node1, node2]);
@@ -246,7 +195,12 @@ function addTreeConstraint(root, n) {
         my = e.clientY;
         nowNode = this;
         nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-        document.addEventListener('mousemove', move2);
+        var t = nowNode;
+        while (t.father) {
+            t.father.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+            t = t.father;
+        }
+        document.addEventListener('mousemove', move);
     })
     nodeSet.push(root);
     var arr = root.childArr;
@@ -272,47 +226,17 @@ for (var i = 0; i < nodeSet.length; i++) {
     }
 }
 document.addEventListener('mouseup', function () {
-    // lineColor = lineUpColor;
-    // for (var i = 0; i < children.length; i++) {
-    //     children[i].line.style.backgroundColor = lineUpColor;
-    // }
-    // dot1.style.boxShadow = 'none';
     if (nowNode) {
         nowNode.style.boxShadow = 'none';
+        var t = nowNode;
+        while (t.father) {
+            t.father.style.boxShadow = 'none';
+            t = t.father;
+        }
     }
     nowNode = null;
-    // document.removeEventListener('mousemove', move1);
-    document.removeEventListener('mousemove', move2);
+    document.removeEventListener('mousemove', move);
 })
-
-// for (var i = 0; i < children.length; i++) {
-//     children[i].addEventListener('mousedown', function (e) {
-//         mx = e.clientX;
-//         my = e.clientY;
-//         nowNode = this;
-//         nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-//         document.addEventListener('mousemove', move2);
-//     })
-// }
-
-
-// for (var i = 0; i < children.length; i++) {
-//     addConstraint(dot1, children[i], 1, constLen);
-//     addSetLine(children[i], dot1);
-//     addConstraint(dot5, children[i], 2, childLen);
-//     addConstraint(dot6, children[i], 2, childLen);
-//     for (var j = i + 1; j < children.length; j++) {
-//         addConstraint(children[i], children[j], 2, childLen);
-//     }
-// }
-
-// addConstraint(dot4, dot5, 1, constLen);
-// addConstraint(dot4, dot6, 1, constLen);
-// addConstraint(dot5, dot6, 2, childLen);
-// addSetLine(dot5, dot4);
-// addSetLine(dot6, dot4);
-// addConstraint(dot5, dot1, 2, childLen);
-// addConstraint(dot6, dot1, 2, childLen);
 
 setInterval(function () {
     for (var i = 0; i < constraintArr.length; i++) {
