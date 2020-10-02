@@ -237,8 +237,8 @@ function addTreeConstraint(root, n) {
 }
 addTreeConstraint(dot1, 0);
 for (var i = 0; i < nodeSet.length; i++) {
-    nodeSet[i].style.left = getIntRandom(0, 1600) + 'px';
-    nodeSet[i].style.top = getIntRandom(0, 700) + 'px';
+    nodeSet[i].style.left = getIntRandom(leftBoundary + boundaryMinLength, rightBoundary - boundaryMinLength) + 'px';
+    nodeSet[i].style.top = getIntRandom(topBoundary + boundaryMinLength, bottomBoundary - boundaryMinLength) + 'px';
     nodeSet[i].x = nodeSet[i].offsetLeft;
     nodeSet[i].y = nodeSet[i].offsetTop;
     addConstraint(nodeSet[i], null, 3, null);
