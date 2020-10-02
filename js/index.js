@@ -17,9 +17,9 @@ dot6.childArr = [dot8, dot9];
 var nowNode;
 var nodeConstLen = 120;
 var nodeMinLen = 100;
-var bfb = 0.9;
+var bfb = 0.7;
 var lineDownColor = 'rgb(246, 255, 80)';
-var lineUpColor = '#aaa';
+var lineUpColor = '#222';
 var lineColor = lineUpColor;
 var constraintArr = new Array();
 var setLineArr = new Array();
@@ -58,20 +58,28 @@ function setline(node1, node2) {
     node1.line.style.position = 'absolute';
     node1.line.style.left = xz - lineLen / 2 + 'px';
     node1.line.style.top = yz - 1 + 'px';
+    node1.line.style.zIndex = -1;
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
     if (node1 == nowNode) {
         node1.line.style.backgroundColor = lineDownColor;
+        node1.line.style.zIndex = 1;
+        node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
         body.appendChild(node1.line);
         var t = nowNode;
         while (t.father) {
             if (t.father.line) {
                 t.father.line.style.backgroundColor = lineDownColor;
+                t.father.line.style.zIndex = 1;
+                t.father.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
                 body.appendChild(t.line);
             }
             t = t.father;
         }
     } else {
         node1.line.style.backgroundColor = lineColor;
+        if (lineColor == lineDownColor) {
+            node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
+        }
         body.appendChild(node1.line);
     }
 }
@@ -270,11 +278,11 @@ setInterval(function () {
         var len = constraintArr[i][3];
         runConstraint(node1, node2, type, len);
     }
-}, 2);
+}, 5);
 setInterval(function () {
     for (var i = 0; i < setLineArr.length; i++) {
         var node1 = setLineArr[i][0];
         var node2 = setLineArr[i][1];
         setline(node1, node2);
     }
-}, 2);
+}, 5);
