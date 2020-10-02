@@ -15,7 +15,7 @@ dot2.childArr = [dot5];
 dot4.childArr = [dot6, dot7];
 dot6.childArr = [dot8, dot9];
 var nowNode;
-var nodeConstLen = 120;
+var nodeConstLen = [150, 120, 100, 100];
 var nodeMinLen = 100;
 var bfb = 0.7;
 var lineDownColor = 'rgb(246, 255, 80)';
@@ -237,7 +237,7 @@ function addTreeConstraint(root, n) {
     if (arr) {
         for (var i = 0; i < arr.length; i++) {
             arr[i].father = root;
-            addConstraint(arr[i], root, 1, nodeConstLen);
+            addConstraint(arr[i], root, 1, nodeConstLen[n]);
             addSetLine(arr[i], root);
             addTreeConstraint(arr[i], n + 1);
         }
@@ -286,3 +286,27 @@ setInterval(function () {
         setline(node1, node2);
     }
 }, 5);
+
+function createTree(node, treeNodeId) {
+    ajax({
+        type: 'get',
+        url: '/node',
+        data: {
+            name: 'asd',
+            age: 123
+        },
+        success: function (text) {
+            console.log(text);
+            // var trn = text;
+            // node.author = trn.author;
+            // node.theme = trn.theme;
+            // node.childIdArr = node.parent_id;
+            // for (var i = 0; i < childIdArr.length; i++) {
+            //     var ch = document.createElement('div');
+            //     ch.father = node;
+            //     createTree(ch, childIdArr[i]);
+            // }
+        }
+    })
+}
+createTree(1, 1);
