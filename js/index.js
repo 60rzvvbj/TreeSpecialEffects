@@ -7,54 +7,43 @@ var dot3 = getDQS('.dot3');
 var dot4 = getDQS('.dot4');
 var dot5 = getDQS('.dot5');
 var dot6 = getDQS('.dot6');
-var children = new Array();
-children[0] = dot2;
-children[1] = dot3;
-children[2] = dot4;
+dot1.childArr = [dot2, dot3, dot4];
+dot4.childArr = [dot5, dot6];
+// var children = new Array();
+// children[0] = dot2;
+// children[1] = dot3;
+// children[2] = dot4;
 // children[3] = dot5;
 // children[4] = dot6;
 var nowNode;
 var constLen = 200;
 var childLen = 150;
-var bfb = 0.8;
+var bfb = 0.9;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#aaa';
 var lineColor = lineUpColor;
-for (var i = 0; i < children.length; i++) {
-    children[i].line = document.createElement('div');
-    children[i].style.left = getIntRandom(0, 1600) + 'px';
-    children[i].style.top = getIntRandom(0, 700) + 'px';
-}
-dot1.style.left = getIntRandom(0, 1600) + 'px';
-dot1.style.top = getIntRandom(0, 700) + 'px';
-dot1.x = dot1.offsetLeft;
-dot1.y = dot1.offsetTop;
-dot5.style.left = getIntRandom(0, 1600) + 'px';
-dot5.style.top = getIntRandom(0, 700) + 'px';
-dot5.x = dot5.offsetLeft;
-dot5.y = dot5.offsetTop;
-dot6.style.left = getIntRandom(0, 1600) + 'px';
-dot6.style.top = getIntRandom(0, 700) + 'px';
-dot6.x = dot6.offsetLeft;
-dot6.y = dot6.offsetTop;
-dot5.addEventListener('mousedown', function (e) {
-    mx = e.clientX;
-    my = e.clientY;
-    nowNode = this;
-    nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-    document.addEventListener('mousemove', move2);
-})
-dot6.addEventListener('mousedown', function (e) {
-    mx = e.clientX;
-    my = e.clientY;
-    nowNode = this;
-    nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-    document.addEventListener('mousemove', move2);
-})
-for (var i = 0; i < children.length; i++) {
-    children[i].x = children[i].offsetLeft;
-    children[i].y = children[i].offsetTop;
-}
+// for (var i = 0; i < children.length; i++) {
+//     children[i].line = document.createElement('div');
+//     children[i].style.left = getIntRandom(0, 1600) + 'px';
+//     children[i].style.top = getIntRandom(0, 700) + 'px';
+// }
+// dot1.style.left = getIntRandom(0, 1600) + 'px';
+// dot1.style.top = getIntRandom(0, 700) + 'px';
+// dot1.x = dot1.offsetLeft;
+// dot1.y = dot1.offsetTop;
+// dot5.style.left = getIntRandom(0, 1600) + 'px';
+// dot5.style.top = getIntRandom(0, 700) + 'px';
+// dot5.x = dot5.offsetLeft;
+// dot5.y = dot5.offsetTop;
+// dot6.style.left = getIntRandom(0, 1600) + 'px';
+// dot6.style.top = getIntRandom(0, 700) + 'px';
+// dot6.x = dot6.offsetLeft;
+// dot6.y = dot6.offsetTop;
+
+// for (var i = 0; i < children.length; i++) {
+//     children[i].x = children[i].offsetLeft;
+//     children[i].y = children[i].offsetTop;
+// }
 
 function move1(e) {
     var cx = e.clientX;
@@ -75,43 +64,33 @@ function move2(e) {
     mx = nowNode.x;
     my = nowNode.y;
 }
-dot1.addEventListener('mousedown', function (e) {
-    nowNode = this;
-    mx = e.clientX;
-    my = e.clientY;
-    dot1.x = dot1.offsetLeft;
-    dot1.y = dot1.offsetTop;
-    lineColor = lineDownColor;
-    dot1.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-    for (var i = 0; i < children.length; i++) {
-        children[i].line.style.backgroundColor = lineDownColor;
-    }
-    document.addEventListener('mousemove', move1);
-})
-
-document.addEventListener('mouseup', function () {
-    lineColor = lineUpColor;
-    for (var i = 0; i < children.length; i++) {
-        children[i].line.style.backgroundColor = lineUpColor;
-    }
-    dot1.style.boxShadow = 'none';
-    if (nowNode) {
-        nowNode.style.boxShadow = 'none';
-    }
-    nowNode = null;
-    document.removeEventListener('mousemove', move1);
-    document.removeEventListener('mousemove', move2);
-})
-
-for (var i = 0; i < children.length; i++) {
-    children[i].addEventListener('mousedown', function (e) {
-        mx = e.clientX;
-        my = e.clientY;
-        nowNode = this;
-        nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
-        document.addEventListener('mousemove', move2);
-    })
-}
+// dot1.addEventListener('mousedown', function (e) {
+//     mx = e.clientX;
+//     my = e.clientY;
+//     nowNode = this;
+//     // dot1.x = dot1.offsetLeft;
+//     // dot1.y = dot1.offsetTop;
+//     // lineColor = lineDownColor;
+//     dot1.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+//     // for (var i = 0; i < children.length; i++) {
+//     //     children[i].line.style.backgroundColor = lineDownColor;
+//     // }
+//     document.addEventListener('mousemove', move1);
+// })
+// dot5.addEventListener('mousedown', function (e) {
+//     mx = e.clientX;
+//     my = e.clientY;
+//     nowNode = this;
+//     nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+//     document.addEventListener('mousemove', move2);
+// })
+// dot6.addEventListener('mousedown', function (e) {
+//     mx = e.clientX;
+//     my = e.clientY;
+//     nowNode = this;
+//     nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+//     document.addEventListener('mousemove', move2);
+// })
 
 function setline(node1, node2) {
     try {
@@ -253,24 +232,88 @@ function runConstraint(node1, node2, type, len) {
         }
     }
 }
+var nodeSet = new Array();
 
-for (var i = 0; i < children.length; i++) {
-    addConstraint(dot1, children[i], 1, constLen);
-    addSetLine(children[i], dot1);
-    addConstraint(dot5, children[i], 2, childLen);
-    addConstraint(dot6, children[i], 2, childLen);
-    for (var j = i + 1; j < children.length; j++) {
-        addConstraint(children[i], children[j], 2, childLen);
+function addTreeConstraint(root, n) {
+    if (!root.father) {
+        root.father = null;
+    }
+    root.layer = n;
+    root.x = root.offsetLeft;
+    root.y = root.offsetTop;
+    root.addEventListener('mousedown', function (e) {
+        mx = e.clientX;
+        my = e.clientY;
+        nowNode = this;
+        nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+        document.addEventListener('mousemove', move2);
+    })
+    nodeSet.push(root);
+    var arr = root.childArr;
+    if (arr) {
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].father = root;
+            addConstraint(arr[i], root, 1, constLen);
+            addSetLine(arr[i], root);
+            addTreeConstraint(arr[i], n + 1);
+        }
     }
 }
+addTreeConstraint(dot1, 0);
+for (var i = 0; i < nodeSet.length; i++) {
+    nodeSet[i].style.left = getIntRandom(0, 1600) + 'px';
+    nodeSet[i].style.top = getIntRandom(0, 700) + 'px';
+    nodeSet[i].x = nodeSet[i].offsetLeft;
+    nodeSet[i].y = nodeSet[i].offsetTop;
+    for (var j = i + 1; j < nodeSet.length; j++) {
+        if ((nodeSet[i].father != nodeSet[j]) && (nodeSet[j].father != nodeSet[i])) {
+            addConstraint(nodeSet[i], nodeSet[j], 2, childLen);
+        }
+    }
+}
+document.addEventListener('mouseup', function () {
+    // lineColor = lineUpColor;
+    // for (var i = 0; i < children.length; i++) {
+    //     children[i].line.style.backgroundColor = lineUpColor;
+    // }
+    // dot1.style.boxShadow = 'none';
+    if (nowNode) {
+        nowNode.style.boxShadow = 'none';
+    }
+    nowNode = null;
+    // document.removeEventListener('mousemove', move1);
+    document.removeEventListener('mousemove', move2);
+})
 
-addConstraint(dot4, dot5, 1, constLen);
-addConstraint(dot4, dot6, 1, constLen);
-addConstraint(dot5, dot6, 2, childLen);
-addSetLine(dot5, dot4);
-addSetLine(dot6, dot4);
-addConstraint(dot5, dot1, 2, childLen);
-addConstraint(dot6, dot1, 2, childLen);
+// for (var i = 0; i < children.length; i++) {
+//     children[i].addEventListener('mousedown', function (e) {
+//         mx = e.clientX;
+//         my = e.clientY;
+//         nowNode = this;
+//         nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+//         document.addEventListener('mousemove', move2);
+//     })
+// }
+
+
+// for (var i = 0; i < children.length; i++) {
+//     addConstraint(dot1, children[i], 1, constLen);
+//     addSetLine(children[i], dot1);
+//     addConstraint(dot5, children[i], 2, childLen);
+//     addConstraint(dot6, children[i], 2, childLen);
+//     for (var j = i + 1; j < children.length; j++) {
+//         addConstraint(children[i], children[j], 2, childLen);
+//     }
+// }
+
+// addConstraint(dot4, dot5, 1, constLen);
+// addConstraint(dot4, dot6, 1, constLen);
+// addConstraint(dot5, dot6, 2, childLen);
+// addSetLine(dot5, dot4);
+// addSetLine(dot6, dot4);
+// addConstraint(dot5, dot1, 2, childLen);
+// addConstraint(dot6, dot1, 2, childLen);
+
 setInterval(function () {
     for (var i = 0; i < constraintArr.length; i++) {
         var node1 = constraintArr[i][0];
@@ -279,11 +322,11 @@ setInterval(function () {
         var len = constraintArr[i][3];
         runConstraint(node1, node2, type, len);
     }
-}, 5);
+}, 2);
 setInterval(function () {
     for (var i = 0; i < setLineArr.length; i++) {
         var node1 = setLineArr[i][0];
         var node2 = setLineArr[i][1];
         setline(node1, node2);
     }
-}, 5);
+}, 2);
