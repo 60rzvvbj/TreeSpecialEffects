@@ -15,8 +15,8 @@ dot2.childArr = [dot5];
 dot4.childArr = [dot6, dot7];
 dot6.childArr = [dot8, dot9];
 var nowNode;
-var constLen = 120;
-var childLen = 100;
+var nodeConstLen = 120;
+var nodeMinLen = 100;
 var bfb = 0.9;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#aaa';
@@ -24,6 +24,11 @@ var lineColor = lineUpColor;
 var constraintArr = new Array();
 var setLineArr = new Array();
 var mx, my;
+var topBoundary = 0;
+var leftBoundary = 0;
+var bottomBoundary = 700;
+var rightBoundary = 1500;
+var boundaryMinLength = 100;
 
 function move(e) {
     var cx = e.clientX;
@@ -179,12 +184,29 @@ function runConstraint(node1, node2, type, len) {
                 setPosition(node2);
             }
         }
+    } else if (type == 3) {
+        var x2 = node1.x;
+        var y2 = node1.y;
+        if (x2 < leftBoundary + boundaryMinLength) {
+            node1.x = node1.x + (leftBoundary + boundaryMinLength - node1.x) * bfb;
+        } else if (x2 > rightBoundary - boundaryMinLength) {
+            node1.x = node1.x - (node1.x - rightBoundary + boundaryMinLength) * bfb;
+        }
+        if (y2 - topBoundary < boundaryMinLength) {
+            node1.y = node1.y + (topBoundary + boundaryMinLength - node1.y) * bfb;
+        } else if (bottomBoundary - y2 < boundaryMinLength) {
+            node1.y = node1.y - (node1.y - bottomBoundary + boundaryMinLength) * bfb;
+        }
+        setPosition(node1);
     }
 }
 var nodeSet = new Array();
 
 function addTreeConstraint(root, n) {
     if (!root.father) {
+        root.addEventListener('mousedown', function () {
+            lineColor = lineDownColor;
+        });
         root.father = null;
     }
     root.layer = n;
@@ -201,13 +223,13 @@ function addTreeConstraint(root, n) {
             t = t.father;
         }
         document.addEventListener('mousemove', move);
-    })
+    });
     nodeSet.push(root);
     var arr = root.childArr;
     if (arr) {
         for (var i = 0; i < arr.length; i++) {
             arr[i].father = root;
-            addConstraint(arr[i], root, 1, constLen);
+            addConstraint(arr[i], root, 1, nodeConstLen);
             addSetLine(arr[i], root);
             addTreeConstraint(arr[i], n + 1);
         }
@@ -219,9 +241,10 @@ for (var i = 0; i < nodeSet.length; i++) {
     nodeSet[i].style.top = getIntRandom(0, 700) + 'px';
     nodeSet[i].x = nodeSet[i].offsetLeft;
     nodeSet[i].y = nodeSet[i].offsetTop;
+    addConstraint(nodeSet[i], null, 3, null);
     for (var j = i + 1; j < nodeSet.length; j++) {
         if ((nodeSet[i].father != nodeSet[j]) && (nodeSet[j].father != nodeSet[i])) {
-            addConstraint(nodeSet[i], nodeSet[j], 2, childLen);
+            addConstraint(nodeSet[i], nodeSet[j], 2, nodeMinLen);
         }
     }
 }
@@ -235,6 +258,7 @@ document.addEventListener('mouseup', function () {
         }
     }
     nowNode = null;
+    lineColor = lineUpColor;
     document.removeEventListener('mousemove', move);
 })
 
