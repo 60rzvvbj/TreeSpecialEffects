@@ -1,22 +1,9 @@
 var tool = new Tool(document, window);
 tool.textProhibition();
 var body = getDQS('body');
-var dot1 = getDQS('.dot1');
-var dot2 = getDQS('.dot2');
-var dot3 = getDQS('.dot3');
-var dot4 = getDQS('.dot4');
-var dot5 = getDQS('.dot5');
-var dot6 = getDQS('.dot6');
-var dot7 = getDQS('.dot7');
-var dot8 = getDQS('.dot8');
-var dot9 = getDQS('.dot9');
-dot1.childArr = [dot2, dot3, dot4];
-dot2.childArr = [dot5];
-dot4.childArr = [dot6, dot7];
-dot6.childArr = [dot8, dot9];
 var nowNode;
 var nodeConstLen = [150, 120, 100, 100];
-var nodeMinLen = 100;
+var nodeMinLen = 150;
 var bfb = 0.7;
 var lineDownColor = 'rgb(246, 255, 80)';
 var lineUpColor = '#222';
@@ -54,10 +41,10 @@ function setline(node1, node2) {
     var k = (y2 - y1) / (x2 - x1);
     var jd = Math.atan(k) * 180 / Math.PI;
     node1.line.style.width = lineLen + 'px';
-    node1.line.style.height = '2px';
+    node1.line.style.height = '1.5px';
     node1.line.style.position = 'absolute';
     node1.line.style.left = xz - lineLen / 2 + 'px';
-    node1.line.style.top = yz - 1 + 'px';
+    node1.line.style.top = yz - 0.75 + 'px';
     node1.line.style.zIndex = -1;
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
     if (node1 == nowNode) {
@@ -243,19 +230,8 @@ function addTreeConstraint(root, n) {
         }
     }
 }
-addTreeConstraint(dot1, 0);
-for (var i = 0; i < nodeSet.length; i++) {
-    nodeSet[i].style.left = getIntRandom(leftBoundary + boundaryMinLength, rightBoundary - boundaryMinLength) + 'px';
-    nodeSet[i].style.top = getIntRandom(topBoundary + boundaryMinLength, bottomBoundary - boundaryMinLength) + 'px';
-    nodeSet[i].x = nodeSet[i].offsetLeft;
-    nodeSet[i].y = nodeSet[i].offsetTop;
-    addConstraint(nodeSet[i], null, 3, null);
-    for (var j = i + 1; j < nodeSet.length; j++) {
-        if ((nodeSet[i].father != nodeSet[j]) && (nodeSet[j].father != nodeSet[i])) {
-            addConstraint(nodeSet[i], nodeSet[j], 2, nodeMinLen);
-        }
-    }
-}
+// addTreeConstraint(dot1, 0);
+
 document.addEventListener('mouseup', function () {
     if (nowNode) {
         nowNode.style.boxShadow = 'none';
@@ -287,26 +263,62 @@ setInterval(function () {
     }
 }, 5);
 
-function createTree(node, treeNodeId) {
+var nodeRequest = 1;
+
+function createTree(node) {
+    node.childArr = new Array();
+    node.style.display = 'none';
+    body.appendChild(node);
+    // console.log(node.id);
     ajax({
         type: 'get',
         url: '/node',
         data: {
-            name: 'asd',
-            age: 123
+            id: node.user_id
         },
-        success: function (text) {
-            console.log(text);
-            // var trn = text;
-            // node.author = trn.author;
-            // node.theme = trn.theme;
-            // node.childIdArr = node.parent_id;
-            // for (var i = 0; i < childIdArr.length; i++) {
-            //     var ch = document.createElement('div');
-            //     ch.father = node;
-            //     createTree(ch, childIdArr[i]);
-            // }
+        success: function (res) {
+            if (res) {
+                node.childIdArr = res.childrenId;
+                node.innerHTML = res.userName;
+                for (var i = 0; i < node.childIdArr.length; i++) {
+                    nodeRequest++;
+                    var ch = document.createElement('div');
+                    ch.father = node;
+                    node.childArr.push(ch);
+                    ch.user_id = node.childIdArr[i];
+                    addClass(ch, 'node');
+                    ch.style.backgroundColor = randomColor(100, 180);
+                    createTree(ch);
+                }
+                nodeRequest--;
+            } else {
+                console.log('用户不存在');
+                nodeRequest--;
+            }
         }
     })
 }
-createTree(1, 1);
+var root = document.createElement('div');
+root.user_id = 1;
+addClass(root, 'root');
+root.style.backgroundColor = randomColor(100, 180);
+createTree(root);
+var nodeRequetTimer = setInterval(function () {
+    if (nodeRequest == 0) {
+        addTreeConstraint(root, 0);
+        for (var i = 0; i < nodeSet.length; i++) {
+            nodeSet[i].style.display = 'block';
+            nodeSet[i].style.left = getIntRandom(leftBoundary + boundaryMinLength, rightBoundary - boundaryMinLength) + 'px';
+            nodeSet[i].style.top = getIntRandom(topBoundary + boundaryMinLength, bottomBoundary - boundaryMinLength) + 'px';
+            nodeSet[i].x = nodeSet[i].offsetLeft;
+            nodeSet[i].y = nodeSet[i].offsetTop;
+            addConstraint(nodeSet[i], null, 3, null);
+            for (var j = i + 1; j < nodeSet.length; j++) {
+                if ((nodeSet[i].father != nodeSet[j]) && (nodeSet[j].father != nodeSet[i])) {
+                    addConstraint(nodeSet[i], nodeSet[j], 2, nodeMinLen);
+                }
+            }
+        }
+        clearInterval(nodeRequetTimer);
+    }
+}, 5);
