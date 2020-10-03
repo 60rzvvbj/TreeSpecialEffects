@@ -23,7 +23,7 @@ user.push({
 user.push({
     id: 4,
     userName: '狗蛋',
-    childrenId: []
+    childrenId: [12, 13, 14]
 });
 user.push({
     id: 5,
@@ -33,7 +33,7 @@ user.push({
 user.push({
     id: 6,
     userName: '陈七',
-    childrenId: []
+    childrenId: [15, 16]
 });
 user.push({
     id: 7,
@@ -43,12 +43,12 @@ user.push({
 user.push({
     id: 8,
     userName: '赵九',
-    childrenId: []
+    childrenId: [17]
 });
 user.push({
     id: 9,
     userName: '周十',
-    childrenId: []
+    childrenId: [18]
 });
 user.push({
     id: 10,
@@ -58,6 +58,66 @@ user.push({
 user.push({
     id: 11,
     userName: '十二',
+    childrenId: []
+});
+user.push({
+    id: 12,
+    userName: '十三',
+    childrenId: []
+});
+user.push({
+    id: 13,
+    userName: '十四',
+    childrenId: [19, 20]
+});
+user.push({
+    id: 14,
+    userName: '十五',
+    childrenId: []
+});
+user.push({
+    id: 15,
+    userName: '十六',
+    childrenId: [21]
+});
+user.push({
+    id: 16,
+    userName: '十七',
+    childrenId: [22]
+});
+user.push({
+    id: 17,
+    userName: '十八',
+    childrenId: []
+});
+user.push({
+    id: 18,
+    userName: '智障',
+    childrenId: []
+});
+user.push({
+    id: 19,
+    userName: '十九',
+    childrenId: []
+});
+user.push({
+    id: 20,
+    userName: '二十',
+    childrenId: []
+});
+user.push({
+    id: 21,
+    userName: '二一',
+    childrenId: []
+});
+user.push({
+    id: 22,
+    userName: '二二',
+    childrenId: []
+});
+user.push({
+    id: 23,
+    userName: '二三',
     childrenId: []
 });
 var template = {

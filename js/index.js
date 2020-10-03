@@ -6,7 +6,7 @@ var nodeConstLen = [150, 120, 100, 100];
 var nodeMinLen = 150;
 var bfb = 0.7;
 var lineDownColor = 'rgb(246, 255, 80)';
-var lineUpColor = '#222';
+var lineUpColor = '#555';
 var lineColor = lineUpColor;
 var constraintArr = new Array();
 var setLineArr = new Array();
@@ -45,7 +45,7 @@ function setline(node1, node2) {
     node1.line.style.position = 'absolute';
     node1.line.style.left = xz - lineLen / 2 + 'px';
     node1.line.style.top = yz - 0.75 + 'px';
-    node1.line.style.zIndex = -1;
+    node1.line.style.zIndex = 1;
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
     if (node1 == nowNode) {
         node1.line.style.backgroundColor = lineDownColor;
@@ -56,7 +56,7 @@ function setline(node1, node2) {
         while (t.father) {
             if (t.father.line) {
                 t.father.line.style.backgroundColor = lineDownColor;
-                t.father.line.style.zIndex = 1;
+                t.father.line.style.zIndex = 19;
                 t.father.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
                 body.appendChild(t.line);
             }
