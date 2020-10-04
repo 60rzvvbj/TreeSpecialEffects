@@ -1,22 +1,25 @@
 var tool = new Tool(document, window);
 tool.textProhibition();
 var body = getDQS('body');
-var nowNode;
-var nodeConstLen = [150, 120, 100, 100];
-var nodeMinLen = 150;
-var bfb = 0.7;
-var lineDownColor = 'rgb(246, 255, 80)';
-var lineUpColor = '#555';
-var lineColor = lineUpColor;
-var constraintArr = new Array();
-var setLineArr = new Array();
-var mx, my;
-var topBoundary = 0;
+var nowNode; // 当前正在拖动的节点
+// var nodeConstLen = [150, 120, 90, 80, 80, 80];
+// var nodeConstLen = [50, 60, 70, 80, 80];
+var nodeConstLen = [80, 75, 70, 65, 50]; // 父子节点之间的固定距离
+var nodeMinLen = 120; // 无关联节点之间的最小距离
+var bfb = 0.9; // 节点之间线的松紧，紧0 - 1松
+var lineDownColor = 'rgb(246, 255, 80)'; // 高亮时的颜色
+var lineUpColor = '#555'; // 非高亮时的颜色
+var lineColor = lineUpColor; // 当前线颜色
+var constraintArr = new Array(); // 记录约束的数组
+var setLineArr = new Array(); // 记录要添加线条的数组
+var mx, my; // 鼠标上次的位置
+var topBoundary = 0; // 边界约束中的边界
 var leftBoundary = 0;
 var bottomBoundary = 700;
 var rightBoundary = 1500;
-var boundaryMinLength = 100;
+var boundaryMinLength = 100; //边界约束中和边界的最小距离
 
+// 鼠标拖动的函数
 function move(e) {
     var cx = e.clientX;
     var cy = e.clientY;
@@ -26,6 +29,7 @@ function move(e) {
     my = nowNode.y;
 }
 
+// 添加线的函数
 function setline(node1, node2) {
     try {
         body.removeChild(node1.line);
