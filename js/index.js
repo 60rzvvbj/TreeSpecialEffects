@@ -71,31 +71,10 @@ function setline(node1, node2) {
     node1.line.style.top = yz - 0.75 + 'px';
     node1.line.style.zIndex = 1;
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
-    // if (node1 == nowNode) {
     node1.line.style.backgroundColor = node1.lineColor;
     node1.line.style.zIndex = node1.lineZIndex;
     node1.line.style.boxShadow = '0px 0px 8px ' + node1.lineColor;
     body.appendChild(node1.line);
-    // var t = nowNode;
-    // if (t) {
-    //     while (t.father) {
-    //         if (t.father.line) {
-    //             t.father.line.style.backgroundColor = t.father.line.lineColor;
-    //             t.father.line.style.zIndex = t.father.line.lineZIndex;
-    //             t.father.line.style.boxShadow = '0px 0px 8px ' + t.father.line.lineColor;
-    //             body.appendChild(t.line);
-    //         }
-    //         t = t.father;
-    //     }
-    // }
-    // changeChild(nowNode, addLightLine);
-    // } else {
-    //     node1.line.style.backgroundColor = lineColor;
-    //     if (lineColor == lineDownColor) {
-    //         node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
-    //     }
-    //     body.appendChild(node1.line);
-    // }
 }
 
 function setPosition(node) {
@@ -226,9 +205,6 @@ var nodeSet = new Array();
 
 function addTreeConstraint(root, n) {
     if (!root.father) {
-        // root.addEventListener('mousedown', function () {
-        //     lineColor = lineDownColor;
-        // });
         root.father = null;
     }
     root.layer = n;
@@ -300,7 +276,6 @@ function createTree(node) {
     node.lineColor = lineUpColor;
     node.lineZIndex = 0;
     body.appendChild(node);
-    // console.log(node.id);
     ajax({
         type: 'get',
         url: '/node',
