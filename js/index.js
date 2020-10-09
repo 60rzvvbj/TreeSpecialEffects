@@ -6,7 +6,7 @@ var nowNode; // 当前正在拖动的节点
 // var nodeConstLen = [50, 60, 70, 80, 80];
 var nodeConstLen = [80, 75, 70, 65, 50]; // 父子节点之间的固定距离
 var nodeMinLen = 120; // 无关联节点之间的最小距离
-var bfb = 0.9; // 节点之间线的松紧，紧0 - 1松
+var bfb = 0.5; // 节点之间线的松紧，紧0 - 1松
 var lineDownColor = 'rgb(246, 255, 80)'; // 高亮时的颜色
 var lineUpColor = '#555'; // 非高亮时的颜色
 var lineColor = lineUpColor; // 当前线颜色
@@ -29,6 +29,26 @@ function move(e) {
     my = nowNode.y;
 }
 
+function addHeightLight(node) {
+    node.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+    node.lineColor = lineDownColor;
+    node.line.lineZIndex = 19;
+}
+
+function removeHeightLight(node) {
+    node.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+    node.style.boxShadow = 'none';
+    node.lineColor = lineUpColor;
+    node.line.lineZIndex = 1;
+}
+
+function changeChild(node, fun) {
+    var chArr = node.childArr;
+    fun(node);
+    for (var i = 0; i < chArr.length; i++) {
+        changeChild(chArr[i], fun);
+    }
+}
 // 添加线的函数
 function setline(node1, node2) {
     try {
@@ -51,28 +71,31 @@ function setline(node1, node2) {
     node1.line.style.top = yz - 0.75 + 'px';
     node1.line.style.zIndex = 1;
     node1.line.style.transform = 'rotate(' + jd + 'deg)';
-    if (node1 == nowNode) {
-        node1.line.style.backgroundColor = lineDownColor;
-        node1.line.style.zIndex = 1;
-        node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
-        body.appendChild(node1.line);
-        var t = nowNode;
-        while (t.father) {
-            if (t.father.line) {
-                t.father.line.style.backgroundColor = lineDownColor;
-                t.father.line.style.zIndex = 19;
-                t.father.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
-                body.appendChild(t.line);
-            }
-            t = t.father;
-        }
-    } else {
-        node1.line.style.backgroundColor = lineColor;
-        if (lineColor == lineDownColor) {
-            node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
-        }
-        body.appendChild(node1.line);
-    }
+    // if (node1 == nowNode) {
+    node1.line.style.backgroundColor = node1.lineColor;
+    node1.line.style.zIndex = node1.lineZIndex;
+    node1.line.style.boxShadow = '0px 0px 8px ' + node1.lineColor;
+    body.appendChild(node1.line);
+    // var t = nowNode;
+    // if (t) {
+    //     while (t.father) {
+    //         if (t.father.line) {
+    //             t.father.line.style.backgroundColor = t.father.line.lineColor;
+    //             t.father.line.style.zIndex = t.father.line.lineZIndex;
+    //             t.father.line.style.boxShadow = '0px 0px 8px ' + t.father.line.lineColor;
+    //             body.appendChild(t.line);
+    //         }
+    //         t = t.father;
+    //     }
+    // }
+    // changeChild(nowNode, addLightLine);
+    // } else {
+    //     node1.line.style.backgroundColor = lineColor;
+    //     if (lineColor == lineDownColor) {
+    //         node1.line.style.boxShadow = '0px 0px 8px ' + lineDownColor;
+    //     }
+    //     body.appendChild(node1.line);
+    // }
 }
 
 function setPosition(node) {
@@ -203,9 +226,9 @@ var nodeSet = new Array();
 
 function addTreeConstraint(root, n) {
     if (!root.father) {
-        root.addEventListener('mousedown', function () {
-            lineColor = lineDownColor;
-        });
+        // root.addEventListener('mousedown', function () {
+        //     lineColor = lineDownColor;
+        // });
         root.father = null;
     }
     root.layer = n;
@@ -218,9 +241,10 @@ function addTreeConstraint(root, n) {
         nowNode.style.boxShadow = '0px 0px 30px ' + lineDownColor;
         var t = nowNode;
         while (t.father) {
-            t.father.style.boxShadow = '0px 0px 30px ' + lineDownColor;
+            addHeightLight(t.father);
             t = t.father;
         }
+        changeChild(root, addHeightLight);
         document.addEventListener('mousemove', move);
     });
     nodeSet.push(root);
@@ -234,16 +258,16 @@ function addTreeConstraint(root, n) {
         }
     }
 }
-// addTreeConstraint(dot1, 0);
 
 document.addEventListener('mouseup', function () {
     if (nowNode) {
         nowNode.style.boxShadow = 'none';
         var t = nowNode;
         while (t.father) {
-            t.father.style.boxShadow = 'none';
+            removeHeightLight(t.father);;
             t = t.father;
         }
+        changeChild(nowNode, removeHeightLight);
     }
     nowNode = null;
     lineColor = lineUpColor;
@@ -272,6 +296,9 @@ var nodeRequest = 1;
 function createTree(node) {
     node.childArr = new Array();
     node.style.display = 'none';
+    node.line = document.createElement('div');
+    node.lineColor = lineUpColor;
+    node.lineZIndex = 0;
     body.appendChild(node);
     // console.log(node.id);
     ajax({
